@@ -10,6 +10,7 @@ function load() {
 }
 
 function saveItem() {
+
   var koumoku = document.getElementById('koumoku');
   localStorage.setItem('item', koumoku.value);
   koumoku.value = '';
@@ -22,10 +23,21 @@ function showItem() {
   if(todoList.hasChildNodes()){
     todoList.removeChild(todoList.childNodes[0]);
   }
-
+  //ストレージデータ取得
   var item = localStorage.getItem('item');
   var text = document.createTextNode(item);
-  todoList.appendChild(text);
+
+  //削除ボタン生成
+  var delBtn = document.createElement('input');
+  delBtn.value = '削除';
+  delBtn.type = 'button';
+
+  //pタグ生成後に追加
+  var pWrap = document.createElement('p');
+  pWrap.appendChild(text);
+  pWrap.appendChild(delBtn);
+  todoList.appendChild(pWrap);
+
 //  var type = typeof item;
 //  console.log(type);
 }
