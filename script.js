@@ -31,6 +31,10 @@ function showItem() {
   var delBtn = document.createElement('input');
   delBtn.value = '削除';
   delBtn.type = 'button';
+  delBtn.addEventListener('click', function(){
+    localStorage.removeItem('item');
+    showItem();
+  });
 
   //pタグ生成後に追加
   var pWrap = document.createElement('p');
