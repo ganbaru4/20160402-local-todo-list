@@ -2,45 +2,76 @@ window.onload = load;
 
 function load() {
   showItem();
-  var addBtn = document.getElementById('addBtn');
+  var addBtn       = document.getElementById('addBtn');
+  var deleteAllBtn = document.getElementById('deleteAllBtn');
   addBtn.addEventListener('click', function () {
     saveItem();
     showItem();
   });
+  deleteAllBtn.addEventListener('click', function(){
+    deleteAllItem();
+  });
+}
+
+function deleteAllItem(){
+  localStorage.clear();
+  window.alert('すべてのデータが削除されました');
+  showItem();
 }
 
 function saveItem() {
-
   var koumoku = document.getElementById('koumoku');
-  localStorage.setItem('item', koumoku.value);
-  koumoku.value = '';
+  var keyName = 'todoitem' + localStorage.length;
+  console.log(keyName);
+  if(koumoku.value != ''){
+    localStorage.setItem(keyName, koumoku.value);
+    koumoku.value = '';
+  }else{
+    window.alert('項目を入力してください');
+  }
 }
 
 function showItem() {
   var todoList = document.getElementById('todoList');
 
-  //子要素削除（リストを消す）
-  if(todoList.hasChildNodes()){
+  //一旦子要素を全削除（リストを消す）
+  while(todoList.hasChildNodes()){
     todoList.removeChild(todoList.childNodes[0]);
   }
-  //ストレージデータ取得
-  var item = localStorage.getItem('item');
-  var text = document.createTextNode(item);
 
-  //削除ボタン生成
-  var delBtn = document.createElement('input');
-  delBtn.value = '削除';
-  delBtn.type = 'button';
-  delBtn.addEventListener('click', function(){
-    localStorage.removeItem('item');
-    showItem();
-  });
+  if(localStorage.length > 0){
 
-  //pタグ生成後に追加
-  var pWrap = document.createElement('p');
-  pWrap.appendChild(text);
-  pWrap.appendChild(delBtn);
-  todoList.appendChild(pWrap);
+    //表示用HTML配列
+    var dataArr = [];
+
+    //ストレージデータ取得
+    for( i = 0; i < localStorage.length; i++){
+
+      //データ取得
+      var dataKey = localStorage.key(i);
+      var listData = localStorage.getItem(dataKey);
+      var text = document.createTextNode(listData);
+
+      //1データごとに削除ボタン生成と削除イベント登録
+      var delBtn = document.createElement('input');
+      delBtn.id = 'todoitem' + i;
+      delBtn.value = '削除';
+      delBtn.type = 'button';
+      delBtn.addEventListener('click', function(){
+        localStorage.removeItem(delBtn.id);
+        showItem();
+      });
+
+      //divを作ってデータと削除ボタンを入れる
+      var divWrap = document.createElement('div');
+      divWrap.appendChild(text);
+      divWrap.appendChild(delBtn);
+      todoList.appendChild(divWrap);
+    }
+
+  }else{
+    todoList.innerHTML = '該当するデータがありません';
+  }
 
 //  var type = typeof item;
 //  console.log(type);
