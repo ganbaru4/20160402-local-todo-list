@@ -46,27 +46,30 @@ function showItem() {
 
     //ストレージデータ取得
     for( i = 0; i < localStorage.length; i++){
+      var counter = i;
+      (function(){
+        //データ取得
+        var dataKey = localStorage.key(counter);
+        var listData = localStorage.getItem(dataKey);
+        var text = document.createTextNode(listData);
 
-      //データ取得
-      var dataKey = localStorage.key(i);
-      var listData = localStorage.getItem(dataKey);
-      var text = document.createTextNode(listData);
+        //1データごとに削除ボタン生成と削除イベント登録
+        var delBtn = document.createElement('input');
+        delBtn.id = 'todoitem' + counter;
+        delBtn.value = '削除';
+        delBtn.type = 'button';
+        delBtn.addEventListener('click', function(){
+          localStorage.removeItem(delBtn.id);
+          showItem();
+        });
+        counter++;
 
-      //1データごとに削除ボタン生成と削除イベント登録
-      var delBtn = document.createElement('input');
-      delBtn.id = 'todoitem' + i;
-      delBtn.value = '削除';
-      delBtn.type = 'button';
-      delBtn.addEventListener('click', function(){
-        localStorage.removeItem(delBtn.id);
-        showItem();
-      });
-
-      //divを作ってデータと削除ボタンを入れる
-      var divWrap = document.createElement('div');
-      divWrap.appendChild(text);
-      divWrap.appendChild(delBtn);
-      todoList.appendChild(divWrap);
+        //divを作ってデータと削除ボタンを入れる
+        var divWrap = document.createElement('div');
+        divWrap.appendChild(text);
+        divWrap.appendChild(delBtn);
+        todoList.appendChild(divWrap);
+      })();
     }
 
   }else{
@@ -76,4 +79,3 @@ function showItem() {
 //  var type = typeof item;
 //  console.log(type);
 }
-
