@@ -19,13 +19,18 @@ function deleteAllItem(){
   showItem();
 }
 
+//使った番号を使わないようにするための変数
+var keyName = 0;
 function saveItem() {
   var koumoku = document.getElementById('koumoku');
-  var keyName = 'todoitem' + localStorage.length;
-  console.log(keyName);
+  for(var i = 0; i < localStorage.length; i++){
+    keyName = localStorage.key(i);
+  }
+  keyName++;
   if(koumoku.value != ''){
     localStorage.setItem(keyName, koumoku.value);
     koumoku.value = '';
+
   }else{
     window.alert('項目を入力してください');
   }
@@ -55,11 +60,10 @@ function showItem() {
 
         //1データごとに削除ボタン生成と削除イベント登録
         var delBtn = document.createElement('input');
-        delBtn.id = 'todoitem' + counter;
         delBtn.value = '削除';
         delBtn.type = 'button';
         delBtn.addEventListener('click', function(){
-          localStorage.removeItem(delBtn.id);
+          localStorage.removeItem(dataKey);
           showItem();
         });
         counter++;
