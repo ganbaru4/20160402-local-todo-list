@@ -68,13 +68,16 @@
         todoList.appendChild(list);
       }());
     }//for
+
+    console.log(todos);
+
   }//function render
   render();
 
   function deleteItem(todo){
-    console.log(todo.koumoku);
     var keyIndex = todos.indexOf(todo);
-    console.log(keyIndex);
+    todos.splice(keyIndex,1);
+    render();
   }
 
   todoForm.addEventListener('submit', addItem);
