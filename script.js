@@ -10,7 +10,7 @@
     },
     {
       koumoku : 'テストデータ2',
-      done : false
+      done : true
     }
   ];
 
@@ -56,6 +56,11 @@
 
         var checkBox = document.createElement('input');
         checkBox.type = 'checkbox';
+        checkBox.checked = todos[index].done;
+        checkBox.addEventListener('change', function(event){
+          todos[index].done = this.checked;
+          render();
+        });
 
         var label = document.createElement('label');
         label.appendChild(checkBox);
