@@ -72,11 +72,8 @@
   render();
 
   function deleteItem(todo){
-
-    console.log('this = ' + this);
-    console.log('todo = ' + todo);
-    console.log('event.target = ' + event.target);
-
+    var index = todos.indexOf(todo);
+    console.log(todos.indexOf(todo));
   }
 
   todoForm.addEventListener('submit', addItem);
