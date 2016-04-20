@@ -48,11 +48,13 @@
         delBtn.value = '削除';
         delBtn.type  = 'button';
         delBtn.addEventListener('click',function(event){
-          deleteItem(todos[index].koumoku);
+          console.log(todos[index].koumoku);
+          var keyIndex = todos.indexOf(todos[index].koumoku);
+          console.log(keyIndex);
         });
 
         var span = document.createElement('span');
-        span.textContent = todos[i].koumoku;
+        span.textContent = todos[index].koumoku;
 
         var checkBox = document.createElement('input');
         checkBox.type = 'checkbox';
@@ -70,11 +72,6 @@
     }//for
   }//function render
   render();
-
-  function deleteItem(todo){
-    var index = todos.indexOf(todo);
-    console.log(todos.indexOf(todo));
-  }
 
   todoForm.addEventListener('submit', addItem);
 
