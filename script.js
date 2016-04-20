@@ -1,85 +1,78 @@
-window.onload = load;
+(function(){
 
-function load() {
-  showItem();
-  var addBtn       = document.getElementById('addBtn');
-  var deleteAllBtn = document.getElementById('deleteAllBtn');
-  addBtn.addEventListener('click', function () {
-    saveItem();
-    showItem();
-  });
-  deleteAllBtn.addEventListener('click', function(){
-    deleteAllItem();
-  });
-}
+  'use strict';
 
-function deleteAllItem(){
-  localStorage.clear();
-  window.alert('すべてのデータが削除されました');
-  showItem();
-}
-
-//使った番号を使わないようにするための変数
-var keyName = 0;
-function saveItem() {
-  var koumoku = document.getElementById('koumoku');
-  for(var i = 0; i < localStorage.length; i++){
-    keyName = localStorage.key(i);
-  }
-  keyName++;
-  if(koumoku.value != ''){
-    localStorage.setItem(keyName, koumoku.value);
-    koumoku.value = '';
-
-  }else{
-    window.alert('項目を入力してください');
-  }
-}
-
-function showItem() {
-  var todoList = document.getElementById('todoList');
-
-  //一旦子要素を全削除（リストを消す）
-  while(todoList.hasChildNodes()){
-    todoList.removeChild(todoList.childNodes[0]);
-  }
-
-  if(localStorage.length > 0){
-
-    //表示用HTML配列
-    var dataArr = [];
-
-    //ストレージデータ取得
-    for( i = 0; i < localStorage.length; i++){
-      var counter = i;
-      (function(){
-        //データ取得
-        var dataKey = localStorage.key(counter);
-        var listData = localStorage.getItem(dataKey);
-        var text = document.createTextNode(listData);
-
-        //1データごとに削除ボタン生成と削除イベント登録
-        var delBtn = document.createElement('input');
-        delBtn.value = '削除';
-        delBtn.type = 'button';
-        delBtn.addEventListener('click', function(){
-          localStorage.removeItem(dataKey);
-          showItem();
-        });
-        counter++;
-
-        //divを作ってデータと削除ボタンを入れる
-        var divWrap = document.createElement('div');
-        divWrap.appendChild(text);
-        divWrap.appendChild(delBtn);
-        todoList.appendChild(divWrap);
-      })();
+  //データ保管配列
+  var todos = [
+    {
+      koumoku : 'テストデータ1',
+      done : false
+    },
+    {
+      koumoku : 'テストデータ2',
+      done : false
     }
+  ];
 
-  }else{
-    todoList.innerHTML = '該当するデータがありません';
+  var todoWrap      = document.getElementById('todo-wrap');
+  var todoList      = document.getElementById('todo-list');
+  var todoForm      = document.getElementById('todo-form');
+  var todoKoumoku   = document.getElementById('todo-koumoku');
+  var todoDelAllBtn = document.getElementById('todo-delAllBtn');
+
+  function addItem(event){
+    event.preventDefault();
+
+//    console.log(typeof todoKoumoku.value);
+    if(todoKoumoku.value == ''){//「!todoKoumoku.value」だけでもいけた。string型が返ってきてるのになぜ？
+      window.alert('項目を入力してください');
+      return;
+    }
+    var todo = {
+      koumoku : todoKoumoku.value,
+      done : false
+    };
+    todos.push(todo);
+
+    todoKoumoku.value = '';
+    render();
   }
 
-//  var type = typeof item;
-//  console.log(type);
-}
+  function render(){
+    todoList.innerHTML = '';
+
+    for(var i = 0; i < todos.length; i++){
+
+      var delBtn   = document.createElement('input');
+      delBtn.value = '削除';
+      delBtn.type  = 'button';
+      delBtn.addEventListener('click', deleteItem);
+
+      var span = document.createElement('span');
+      span.textContent = todos[i].koumoku;
+
+      var checkBox = document.createElement('input');
+      checkBox.type = 'checkbox';
+
+      var label = document.createElement('label');
+      label.appendChild(checkBox);
+      label.appendChild(span);
+
+      var list = document.createElement('li');
+      list.appendChild(label);
+      list.appendChild(delBtn);
+
+      todoList.appendChild(list);
+
+    }
+  }
+  render();
+
+  function deleteItem(){
+    var target = this.parentNode;//thisで呼び出し元のボタンがとれてる
+    todoList.removeChild(target);
+  }
+
+  todoForm.addEventListener('submit', addItem);
+
+}());
