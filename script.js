@@ -48,9 +48,7 @@
         delBtn.value = '削除';
         delBtn.type  = 'button';
         delBtn.addEventListener('click',function(event){
-          console.log(todos[index].koumoku);
-          var keyIndex = todos.indexOf(todos[index]);
-          console.log(keyIndex);
+          deleteItem(todos[index]);
         });
 
         var span = document.createElement('span');
@@ -72,6 +70,12 @@
     }//for
   }//function render
   render();
+
+  function deleteItem(todo){
+    console.log(todo.koumoku);
+    var keyIndex = todos.indexOf(todo);
+    console.log(keyIndex);
+  }
 
   todoForm.addEventListener('submit', addItem);
 
