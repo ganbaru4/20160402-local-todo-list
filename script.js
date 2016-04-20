@@ -49,7 +49,7 @@
         delBtn.type  = 'button';
         delBtn.addEventListener('click',function(event){
           console.log(todos[index].koumoku);
-          var keyIndex = todos.indexOf(todos[index].koumoku);
+          var keyIndex = todos.indexOf(todos[index]);
           console.log(keyIndex);
         });
 
