@@ -42,35 +42,41 @@
     todoList.innerHTML = '';
 
     for(var i = 0; i < todos.length; i++){
+      (function(){
+        var index = i;
+        var delBtn   = document.createElement('input');
+        delBtn.value = '削除';
+        delBtn.type  = 'button';
+        delBtn.addEventListener('click',function(event){
+          deleteItem(todos[index].koumoku);
+        });
 
-      var delBtn   = document.createElement('input');
-      delBtn.value = '削除';
-      delBtn.type  = 'button';
-      delBtn.addEventListener('click', deleteItem);
+        var span = document.createElement('span');
+        span.textContent = todos[i].koumoku;
 
-      var span = document.createElement('span');
-      span.textContent = todos[i].koumoku;
+        var checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
 
-      var checkBox = document.createElement('input');
-      checkBox.type = 'checkbox';
+        var label = document.createElement('label');
+        label.appendChild(checkBox);
+        label.appendChild(span);
 
-      var label = document.createElement('label');
-      label.appendChild(checkBox);
-      label.appendChild(span);
+        var list = document.createElement('li');
+        list.appendChild(label);
+        list.appendChild(delBtn);
 
-      var list = document.createElement('li');
-      list.appendChild(label);
-      list.appendChild(delBtn);
-
-      todoList.appendChild(list);
-
-    }
-  }
+        todoList.appendChild(list);
+      }());
+    }//for
+  }//function render
   render();
 
-  function deleteItem(){
-    var target = this.parentNode;//thisで呼び出し元のボタンがとれてる
-    todoList.removeChild(target);
+  function deleteItem(todo){
+
+    console.log('this = ' + this);
+    console.log('todo = ' + todo);
+    console.log('event.target = ' + event.target);
+
   }
 
   todoForm.addEventListener('submit', addItem);
