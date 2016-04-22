@@ -2,23 +2,30 @@
 
   'use strict';
 
-  //データ保管配列
-  var todos = [
-    {
-      koumoku : 'テストデータ1',
-      done : false
-    },
-    {
-      koumoku : 'テストデータ2',
-      done : true
-    }
-  ];
+  //データ保管配列、いったんnull確認
+  var todos = localStorage.getItem('todos');
+  //データがあるか判定、あれば配列に戻して、なければカラの配列を生成（render関数内でカラのjsonオブジェクト？がストレージに登録される）
+  if(todos){
+    todos = JSON.parse(todos);
+  }else{
+    todos = [];
+  }
 
   var todoWrap      = document.getElementById('todo-wrap');
   var todoList      = document.getElementById('todo-list');
   var todoForm      = document.getElementById('todo-form');
   var todoKoumoku   = document.getElementById('todo-koumoku');
   var todoDelAllBtn = document.getElementById('todo-delAllBtn');
+
+
+  function delAllItem(){
+    if(window.confirm('すべての項目を削除しますか？')){
+      localStorage.clear();
+      todoList.innerHTML = '';
+    }else{
+      return;
+    }
+  }
 
   function addItem(event){
     event.preventDefault();
@@ -75,9 +82,9 @@
     }//for
 
     console.log(todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
 
   }//function render
-  render();
 
   function deleteItem(todo){
     var keyIndex = todos.indexOf(todo);
@@ -86,5 +93,7 @@
   }
 
   todoForm.addEventListener('submit', addItem);
+  todoDelAllBtn.addEventListener('click', delAllItem);
 
+  render();
 }());
