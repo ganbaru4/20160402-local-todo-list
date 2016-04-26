@@ -28,6 +28,7 @@
     if(window.confirm('すべての項目を削除しますか？')){
       localStorage.clear();
       todoList.innerHTML = '';
+      todos = [];
     }else{
       return;
     }
